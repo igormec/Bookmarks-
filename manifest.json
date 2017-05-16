@@ -1,0 +1,22 @@
+{
+
+	"manifest_version": 2,
+
+	"name": "Bookmarks+",
+	"description": "Make life a little easier by automatically sorting bookmarks into basic groups.",
+	"version": "0.1",
+
+	"permissions": [
+          "bookmarks"
+    ],
+
+	//"icons": { 	"16": "icon16.png",
+    //      	 	"48": "icon48.png",
+    //	     	 	"128": "icon128.png" },
+
+    "chrome_url_overrides" : {
+    	"bookmarks": "bookmarks-plus.html"
+  	}
+
+
+}
