@@ -20,10 +20,28 @@
 			    font-style: normal;
 			}
 
+			@font-face {
+			    font-family: 'bebasreg';
+			    src: url('./res/fonts/bebas___-webfont.eot');
+			    src: url('./res/fonts/bebas___-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('./res/fonts/bebas___-webfont.woff2') format('woff2'),
+			         url('./res/fonts/bebas___-webfont.woff') format('woff'),
+			         url('./res/fonts/bebas___-webfont.ttf') format('truetype'),
+			         url('./res/fonts/bebas___-webfont.svg#bebasregular') format('svg');
+			    font-weight: normal;
+			    font-style: normal;
+			}
+
 			body {
 				margin: 0px;
 				padding: 0px;
 				min-width: 1000px;
+			}
+
+			.clear {
+				clear:both;
+				margin: 0px;
+				padding: 0px;
 			}
 
 			#topBar {
@@ -52,42 +70,55 @@
 				letter-spacing: 17px;
 			}
 
+			#innerTitleSpan {
+				letter-spacing: 1px;
+			}
+
 			#downloadBar {
-				margin: auto;
 				white-space: nowrap;
 				float: top;
-				height: 75px;
+				height: 0px;
+				opacity: 0;
 				background-color: #7F7F7F;
 			}
 
 			#downloadInner {
-				margin: auto;
-				
+				margin: 0 auto;
+				padding-right: 15px;	
+				width: 860px;
 			}
 			
-			#mainInfoDiv {
-				float: top;
-				white-space: nowrap;
-				height: 200px;
-				background-color: blue;
-			}
 
-			.text {
-				text-align: center;
-				font-family: arial;
+			#downloadText {
+				float: left;
+				font-family: "bebasreg";
 				font-weight: bold;
-				color: #393950;
-				padding-top: 20px;
-				margin: 0;
 				font-size: 30px;
+				color: #39394A;
+				letter-spacing: 1px;
+				margin-top: 15px;
 				white-space: nowrap;
 			}
 
 			.downloadButton {
-				width: 10px;
-				height: 10px;
+				float: right;
+				width: 50px;
+				height: 50px;
+				margin: 10px;
+				margin-top: 12px;
 				border-radius: 10px;
 				background-color: #303030;
+			}
+
+			#mainInfoDiv {
+				float: top;
+				white-space: nowrap;
+				height: 200px;
+				background-color: #FAFAFA;
+			}
+
+			.browserButtonImg {
+				padding-top: 5px;
 			}
 
 
@@ -105,26 +136,49 @@
 				-->
 
 				<div id="mainTitle">
-					<span id="titleSpan">BOOKMARKS<span style="letter-spacing: 1px;"> +</span></span>
+					<span id="titleSpan">BOOKMARKS<span id="innerTitleSpan"> +</span></span>
 				</div>
 			</div>
 		</div>
 
+		
+
 		<div id="downloadBar">
-			<div id="downloadInner">
-				<p class="text">Click on your browser to download Bookmarks+</p>
-				<div class="downloadButton"></div>
-				<div class="downloadButton"></div>
-				<div class="downloadButton"></div>
+			<div id="downloadInner" align="center">
+				<span id="downloadText">Download &nbsp; Bookmarks+ &nbsp;&nbsp;for&nbsp; your&nbsp; browser</span>
+				<div class="downloadButton">
+					<a href="https://addons.opera.com/en/" target="_blank">
+						<img class="browserButtonImg" src="./res/img/opera-logo.png" width="40">
+					</a>
+				</div>
+				<div class="downloadButton">
+					<a href="https://addons.mozilla.org/en-US/firefox/" target="_blank">
+						<img class="browserButtonImg" src="./res/img/ff-logo.png" width="40">
+					</a>
+				</div>
+				<div class="downloadButton">
+					<a href="https://chrome.google.com/webstore/category/extensions" target="_blank">
+						<img class="browserButtonImg" src="./res/img/chrome-logo.png" width="40">
+					</a>
+				</div>
 			</div>
+			
 		</div>
 
 		<div id="mainInfoDiv">
-			<p class="text">Here is some text!!!</p>
+			
 		</div>
 
 		<script type="text/javascript">
 			
+			document.addEventListener('DOMContentLoaded', function () {
+				setTimeout(function(){
+					$("#downloadBar").animate({"opacity":100,"height": 75}, 850);
+				}, 850);
+			});
+
+
+
 			$("#mainInfoDiv").click(function() {
 				if($("#downloadBar").css("opacity") != 0){
 					$("#downloadBar").animate({"opacity":0, "height": 0}, 500);

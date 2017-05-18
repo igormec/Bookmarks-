@@ -10,6 +10,9 @@ function showAll(){
 }
 
 
+function getAllNodes(){}
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   showAll();
