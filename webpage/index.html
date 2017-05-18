@@ -23,6 +23,7 @@
 			body {
 				margin: 0px;
 				padding: 0px;
+				min-width: 1000px;
 			}
 
 			#topBar {
@@ -51,22 +52,42 @@
 				letter-spacing: 17px;
 			}
 
-			#downloadDiv {
+			#downloadBar {
+				margin: auto;
+				white-space: nowrap;
 				float: top;
-				height: 100px;
-				background-color: red;
+				height: 75px;
+				background-color: #7F7F7F;
+			}
+
+			#downloadInner {
+				margin: auto;
+				
 			}
 			
 			#mainInfoDiv {
 				float: top;
+				white-space: nowrap;
 				height: 200px;
 				background-color: blue;
 			}
 
 			.text {
-				padding: 0;
+				text-align: center;
+				font-family: arial;
+				font-weight: bold;
+				color: #393950;
+				padding-top: 20px;
 				margin: 0;
-				font-size: 50px;
+				font-size: 30px;
+				white-space: nowrap;
+			}
+
+			.downloadButton {
+				width: 10px;
+				height: 10px;
+				border-radius: 10px;
+				background-color: #303030;
 			}
 
 
@@ -89,8 +110,13 @@
 			</div>
 		</div>
 
-		<div id="downloadDiv">
-			<p class="text">Here is some text!!!</p>
+		<div id="downloadBar">
+			<div id="downloadInner">
+				<p class="text">Click on your browser to download Bookmarks+</p>
+				<div class="downloadButton"></div>
+				<div class="downloadButton"></div>
+				<div class="downloadButton"></div>
+			</div>
 		</div>
 
 		<div id="mainInfoDiv">
@@ -100,51 +126,13 @@
 		<script type="text/javascript">
 			
 			$("#mainInfoDiv").click(function() {
-				if($("#downloadDiv").css("opacity") != 0){
-					$("#downloadDiv").animate({"opacity":0, "height": 0}, 500);
-					
-				
+				if($("#downloadBar").css("opacity") != 0){
+					$("#downloadBar").animate({"opacity":0, "height": 0}, 500);
+									
 				}else{
-					$("#downloadDiv").animate({"opacity":100, "height": 100}, 500);
+					$("#downloadBar").animate({"opacity":100, "height": 75}, 500);
 				}
 			});
-
-
-			/*$("#click").click(function() {
-
-				if($("#par").css("display") == "none"){
-					$("#par").fadeIn("slow");
-				
-				}else{
-					$("#par").fadeOut("slow");
-				}
-
-			});	
-
-
-			var textShowing = true;
-
-			$("#click").click(function() {
-				if (textShowing) {
-					$("#par").fadeOut(function(){
-						textShowing = false;
-					});
-				
-				}else{
-					$("#par").fadeIn(function(){
-						textShowing = true;
-					});	
-				}
-			});
-
-			/*$("#click2").click(function() {
-				$("#par2").fadeIn("slow");
-			});
-
-			*/
-
-
-
 
 		</script>
 
