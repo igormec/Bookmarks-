@@ -1,8 +1,9 @@
 
 
 function showAll(){
-	var allNodes = chrome.bookmarks.getTree(funtion(){
-		console.log(allNodes);
+	var allNodes = chrome.bookmarks.getTree(function(){
+		$("#bm-list").append(allNodes);
+		//console.log(allNodes);
 	});
 
 	/*var list = $('<ul>');
