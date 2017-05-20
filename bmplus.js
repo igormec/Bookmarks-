@@ -23,7 +23,7 @@ function showNode(node){
 		anc.attr("href", node.url);
 		anc.text(node.title);
 		var span = $("<span>");
-		span.append(anc);
+		span.append(anc).append(" - " +new Date(node.dateAdded));
 	}
 	var li = $(node.title ? "<li>" : "<div>").append(span);
 	
