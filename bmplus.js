@@ -16,14 +16,19 @@ function parseNodes(nodeList){
 	return list;
 }
 
-//Exxtracts the data from each individual bookmarkNode
+//Extracts the data from each individual bookmarkNode
 function showNode(node){
 	if(node.title){
-		var anc = $("<a>");
+		/*var anc = $("<a>");
 		anc.attr("href", node.url);
 		anc.text(node.title);
 		var span = $("<span>");
-		span.append(anc).append(" - " +new Date(node.dateAdded));
+		span.append(anc).append(" - " +new Date(node.dateAdded));*/
+
+		var row = $("<tr>");
+		row.text(node.title);
+
+
 	}
 	var li = $(node.title ? "<li>" : "<div>").append(span);
 	
