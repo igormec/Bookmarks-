@@ -4,6 +4,7 @@
 		<title>Bookmarks+</title>
 
 		<script src="jquery.min.js"></script>
+		<script src="jquery.color-2.1.2.min.js"></script>
 		<script type="text/javascript" src="bmplus.js"></script>
 
 		<style type="text/css">
@@ -13,10 +14,23 @@
 				padding: 0;
 			}
 
+			td {
+				margin: 0;
+				padding: 0;
+			}
+
 			.mainListItem {
 				background-color: #494949;
 				width: 250px;
 				height: 65px;
+				margin: 0;
+				padding: 0;
+			}
+
+			#bmTable {
+				border-spacing: 1px;
+				border-collapse: separate;
+
 			}
 
 		</style>
@@ -32,6 +46,11 @@
 
 
 		<table id="bmTable">
+			
+
+
+
+			
 			<tr>
 				<td><div class="mainListItem">Some text</div></td>
 				<td><div class="mainListItem"></div></td>
@@ -63,6 +82,8 @@
 				<td><div class="mainListItem">Some text</div></td>
 				<td><div class="mainListItem"></div></td>
 			</tr>
+
+			
 
 		</table>
 
