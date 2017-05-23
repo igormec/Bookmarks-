@@ -11,15 +11,15 @@ function showAll(){
 
 //Goes through the list returned by chrome.bookmarks.getTree()
 function parseNodes(nodeList){
-	//var list = $("<ul>");
+	var $table = $("#bmTable");
 
-	/*for(var i = 0;i < Math.ceil(nodeList.length/4);i++){
+	for(var i = 0;i < Math.ceil(nodeList.length/4);i++){
 
-		var row = $("<tr>");
+		var $row = $("<tr>");
 		for(var j = 0; j < 4;j++){
-			row.append(showNode(nodeList[i]));
+			$row.append(showNode(nodeList[i]));
 	}
-	return list;*/
+	return list;
 }
 
 //Extracts the data from each individual bookmarkNode
@@ -31,9 +31,10 @@ function showNode(node){
 		var span = $("<span>");
 		span.append(anc).append(" - " +new Date(node.dateAdded));*/
 
-		var span = $("<span>");
-		var td = $("<td>");
-		td.text(node.title);
+		var $listDiv = $("<div>", {"class":"mainListItem"});
+		$listDiv.append(node.title);
+		var $td = $("<td>");
+		$td.append($listDiv);
 
 	}
 	//var li = $(node.title ? "<li>" : "<div>").append(span);
@@ -50,14 +51,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
   	$(".mainListItem").hover(
 		function() {
-			
-			//$(this).animate({"opacity":0}, 1000);
-			$(this).animate({"backgroundColor":"#252525"}, 100);
+			$(this).animate({"backgroundColor":"#252525"}, 125);
 		},
 		function() {
-			$(this).animate({"backgroundColor":"#494949"}, 100);
+			$(this).animate({"backgroundColor":"#494949"}, 125);
+		}
+	);
+
+	$(".mainListItem").click(
+		function() {
+			$(this).append("You clicked!");		
+			
 		}
 	);
 	
 
-})
+});
