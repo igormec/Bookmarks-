@@ -1,12 +1,52 @@
 
 
+function getMainSubTree() {
+	var tree = chrome.bookmarks.getTree(
+		function(tree){
+			tree = tree.children;
+		});
 
+	return tree;
+}
 
 //Shows all bookmarks as a list of links
-function showAll(){
+/*function showAll(){
 	var allNodes = chrome.bookmarks.getTree(function(allNodes){
 		$("#bm-list").append(parseNodes(allNodes));
 	});
+}*/
+
+
+function makeTable(nodeList) {
+	
+	
+	var $table = $("#bmTable");
+	$table.remove();
+	//nuclear option
+	//$table.html("");
+	console.log(nodeList.length);
+
+	for(var i = 0;i < (nodeList.length);i++){
+
+		var node = nodeList[i];
+
+		if(i % 4 == 0){
+			var $row = $("<tr>");	
+		}
+		
+		//Make a td
+		//make the mainListItem div inside td
+
+		var $td = $("<td>");
+
+		if (node.title){
+			$td.append(makeLinkDiv(node));
+			console.log(node.title);
+		}else{
+			console.log("Group");
+			$td.append(makeGroupDiv);
+		}
+	}
 }
 
 //Goes through the list returned by chrome.bookmarks.getTree()
@@ -18,6 +58,7 @@ function parseNodes(nodeList){
 		var $row = $("<tr>");
 		for(var j = 0; j < 4;j++){
 			$row.append(showNode(nodeList[i]));
+		}
 	}
 	return list;
 }
@@ -47,14 +88,22 @@ function showNode(node){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  	showAll();
+  	//showAll();
+
+  	var tree = chrome.bookmarks.getTree(
+  		function(tree){
+  			makeTable(tree)	
+  		}
+	);
+  	
+
 
   	$(".mainListItem").hover(
 		function() {
-			$(this).animate({"backgroundColor":"#252525"}, 125);
+			$(this).animate({"backgroundColor":"#252525"}, 100);
 		},
 		function() {
-			$(this).animate({"backgroundColor":"#494949"}, 125);
+			$(this).animate({"backgroundColor":"#494949"}, 100);
 		}
 	);
 
