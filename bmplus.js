@@ -29,19 +29,14 @@ function makeTable(nodeList) {
 	console.log(nodeList.length);
 
 	for(var i = 0;i < (nodeList.length);i++){
-
 		var node = nodeList[i];
-
-		if(i % 4 == 0){
-			console.log("Making row");
+		//Add a new row every 5 columns
+		if(i % 5 == 0){
 			var $row = $("<tr>");
 			$tbody.append($row);
 		}
-		
 		//Make a td
 		//make the mainListItem div inside td
-
-		console.log("Making cell");
 		var $td = $("<td>");
 
 		if (node.title){
@@ -61,10 +56,9 @@ function makeTable(nodeList) {
 
 
 function makeLinkDiv(node){
-	console.log(node);
 	var $listDiv = $("<div>", {"class":"mainListItem", "id":node.id});
-	$listDiv.append(node.title);
-	console.log($listDiv);
+	var $span = $("<p>", {"class":"listItemLink"}).append(node.title);
+	$listDiv.append($span);
 	return $listDiv;
 }
 
@@ -137,12 +131,10 @@ function addEvents(){
 					if (node.children){
 						makeTable(node.children);
 						//console.log("Has childs");
+					}else{
+						chrome.tabs.create({url: node.url});
 					}
-					
 				});
-
-			
-
 			$(this).append("You clicked!");		
 			
 		}
@@ -151,10 +143,11 @@ function addEvents(){
 
 document.addEventListener('DOMContentLoaded', function () {
   	var tree = chrome.bookmarks.getTree(
+  		//on load, tree is 0th/top node given in an array of length 1
+  		//take children of tree[0] to get Bookmarks Bar and Other bookmarks
   		function(tree){
-  			var mainTree = tree[0].children;
-  			makeTable(mainTree);
-  				
+  			var mainBookmarksArray = tree[0].children;
+  			makeTable(mainBookmarksArray);  				
   		}
 	);
 });
