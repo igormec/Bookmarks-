@@ -20,7 +20,7 @@
 function makeTable(nodeList) {
 	var $table = $("#bmTable");
 	$table.remove();
-	$("body").append($("<table>", {"id":"bmTable"}))
+	$("#bm-list").append($("<table>", {"id":"bmTable"}))
 	$table = $("#bmTable");
 	$tbody = $("<tbody>");
 	$table.append($tbody);
@@ -124,19 +124,14 @@ function addEvents(){
 		function() {
 			var node = chrome.bookmarks.getSubTree(this.id,
 				function(node){
-					console.log(node);
 					node = node[0];
-					//console.log(node.children);
-
-					if (node.children){
+					if (node.children && node.children.length > 0){
 						makeTable(node.children);
-						//console.log("Has childs");
 					}else{
 						chrome.tabs.create({url: node.url});
 					}
-				});
-			$(this).append("You clicked!");		
-			
+				}
+			);			
 		}
 	);
 }
