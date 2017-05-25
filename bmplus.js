@@ -1,13 +1,13 @@
 
 
-function getMainSubTree() {
+/*function getMainSubTree() {
 	var tree = chrome.bookmarks.getTree(
 		function(tree){
-			tree = tree.children;
+			tree = tree.getChildren();
 		});
 
 	return tree;
-}
+}*/
 
 //Shows all bookmarks as a list of links
 /*function showAll(){
@@ -18,10 +18,12 @@ function getMainSubTree() {
 
 
 function makeTable(nodeList) {
-	
-	
 	var $table = $("#bmTable");
 	$table.remove();
+	$("body").append($("<table>", {"id":"bmTable"}))
+	$table = $("#bmTable");
+	$tbody = $("<tbody>");
+	$table.append($tbody);
 	//nuclear option
 	//$table.html("");
 	console.log(nodeList.length);
@@ -31,23 +33,48 @@ function makeTable(nodeList) {
 		var node = nodeList[i];
 
 		if(i % 4 == 0){
-			var $row = $("<tr>");	
+			console.log("Making row");
+			var $row = $("<tr>");
+			$tbody.append($row);
 		}
 		
 		//Make a td
 		//make the mainListItem div inside td
 
+		console.log("Making cell");
 		var $td = $("<td>");
 
 		if (node.title){
-			$td.append(makeLinkDiv(node));
 			console.log(node.title);
+			$td.append(makeLinkDiv(node));
+			
 		}else{
 			console.log("Group");
-			$td.append(makeGroupDiv);
+			$td.append(makeGroupDiv(node));
 		}
+
+		$row.append($td);
 	}
+	addEvents();
 }
+
+
+
+function makeLinkDiv(node){
+	console.log(node);
+	var $listDiv = $("<div>", {"class":"mainListItem", "id":node.id});
+	$listDiv.append(node.title);
+	console.log($listDiv);
+	return $listDiv;
+}
+
+function makeGroupDiv(node){
+	var $listDiv = $("<div>", {"class":"mainListItem", "id":node.id});
+	$listDiv.append("Group");
+	console.log($listDiv);
+	return $listDiv;
+}
+
 
 //Goes through the list returned by chrome.bookmarks.getTree()
 function parseNodes(nodeList){
@@ -87,18 +114,10 @@ function showNode(node){
 	return li;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  	//showAll();
 
-  	var tree = chrome.bookmarks.getTree(
-  		function(tree){
-  			makeTable(tree)	
-  		}
-	);
-  	
+function addEvents(){
 
-
-  	$(".mainListItem").hover(
+	$(".mainListItem").hover(
 		function() {
 			$(this).animate({"backgroundColor":"#252525"}, 100);
 		},
@@ -109,10 +128,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	$(".mainListItem").click(
 		function() {
+			var node = chrome.bookmarks.getSubTree(this.id,
+				function(node){
+					console.log(node);
+					node = node[0];
+					//console.log(node.children);
+
+					if (node.children){
+						makeTable(node.children);
+						//console.log("Has childs");
+					}
+					
+				});
+
+			
+
 			$(this).append("You clicked!");		
 			
 		}
 	);
-	
+}
 
+document.addEventListener('DOMContentLoaded', function () {
+  	var tree = chrome.bookmarks.getTree(
+  		function(tree){
+  			var mainTree = tree[0].children;
+  			makeTable(mainTree);
+  				
+  		}
+	);
 });
