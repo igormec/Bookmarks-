@@ -16,6 +16,9 @@
 	});
 }*/
 
+var currentNode = null;
+
+
 
 function makeTable(nodeList) {
 	var $table = $("#bmTable");
@@ -127,9 +130,24 @@ function addEvents(){
 					node = node[0];
 					if (node.children && node.children.length > 0){
 						makeTable(node.children);
+						currentNode = node;
 					}else{
 						chrome.tabs.create({url: node.url});
 					}
+				}
+			);			
+		}
+	);
+
+
+
+	$("#upButton").click(
+		function() {
+			var node = chrome.bookmarks.getSubTree(currentNode.parentId,
+				function(node){
+					node = node[0];
+					makeTable(node.children);
+					currentNode = node;
 				}
 			);			
 		}
@@ -144,5 +162,16 @@ document.addEventListener('DOMContentLoaded', function () {
   			var mainBookmarksArray = tree[0].children;
   			makeTable(mainBookmarksArray);  				
   		}
+	);
+
+	$("#upButton").hover(
+		function() {
+			$(this).animate({"backgroundColor":"#252525"}, 100);
+			//alert("IN");
+		},
+		function() {
+			$(this).animate({"backgroundColor":"#494949"}, 100);
+			//alert("OUT");
+		}
 	);
 });
