@@ -1,24 +1,4 @@
-
-
-/*function getMainSubTree() {
-	var tree = chrome.bookmarks.getTree(
-		function(tree){
-			tree = tree.getChildren();
-		});
-
-	return tree;
-}*/
-
-//Shows all bookmarks as a list of links
-/*function showAll(){
-	var allNodes = chrome.bookmarks.getTree(function(allNodes){
-		$("#bm-list").append(parseNodes(allNodes));
-	});
-}*/
-
 var currentNode = null;
-
-
 
 function makeTable(nodeList) {
 	var $table = $("#bmTable");
@@ -31,85 +11,76 @@ function makeTable(nodeList) {
 	//$table.html("");
 	console.log(nodeList.length);
 
+	//Go through all the nodes at the current BookmarkNode
 	for(var i = 0;i < (nodeList.length);i++){
 		var node = nodeList[i];
-		//Add a new row every 5 columns
+		//Add a new row every 5 nodes, makes 5 columns.
 		if(i % 5 == 0){
 			var $row = $("<tr>");
 			$tbody.append($row);
 		}
-		//Make a td
+		//Make a td element
 		//make the mainListItem div inside td
 		var $td = $("<td>");
 
-		if (node.title){
-			console.log(node.title);
+		if (node.url){
 			$td.append(makeLinkDiv(node));
-			
 		}else{
-			console.log("Group");
 			$td.append(makeGroupDiv(node));
 		}
-
+		//After adding 5 nodes to row, append row to table
 		$row.append($td);
 	}
+	//Refresh all the divs functionalities
 	addEvents();
 }
 
 
-
 function makeLinkDiv(node){
-	var $listDiv = $("<div>", {"class":"mainListItem", "id":node.id});
-	var $span = $("<p>", {"class":"listItemLink"}).append(node.title);
-	$listDiv.append($span);
-	return $listDiv;
+	var $itemDiv = $("<div>", {"class":"mainListItem", "id":node.id});
+	var $span = $("<p>", {"class":"listItemLink"}).append(node.title ? node.title : node.url);
+	$itemDiv.append($span);
+	return $itemDiv;
 }
 
 function makeGroupDiv(node){
-	var $listDiv = $("<div>", {"class":"mainListItem", "id":node.id});
-	$listDiv.append("Group");
-	console.log($listDiv);
-	return $listDiv;
+	var $itemDiv = $("<div>", {"class":"mainListItem", "id":node.id});
+	var $span = $("<p>", {"class":"listItemLink"}).append(node.title ? node.title : "Group");
+	$itemDiv.append($span);
+	return $itemDiv;
 }
 
-
-//Goes through the list returned by chrome.bookmarks.getTree()
-function parseNodes(nodeList){
-	var $table = $("#bmTable");
-
-	for(var i = 0;i < Math.ceil(nodeList.length/4);i++){
-
-		var $row = $("<tr>");
-		for(var j = 0; j < 4;j++){
-			$row.append(showNode(nodeList[i]));
-		}
-	}
-	return list;
+function makeInfoBar(node){
+	var $itemDiv = $("<div>", {"class":"mainListItem", "id":node.id});
+	var $span = $("<p>", {"class":"listItemLink"}).append(node.title ? node.title : node.url);
+	$itemDiv.append($span);
+	return $itemDiv;
 }
 
-//Extracts the data from each individual bookmarkNode
-function showNode(node){
-	if(node.title){
-		/*var anc = $("<a>");
-		anc.attr("href", node.url
-		anc.text(node.title);
-		var span = $("<span>");
-		span.append(anc).append(" - " +new Date(node.dateAdded));*/
+function getMonthString(month){
+	return ["January", "February", "March", "April", "May", 
+			"June", "July", "August","September","October", "November", "December"][month];
+}
 
-		var $listDiv = $("<div>", {"class":"mainListItem"});
-		$listDiv.append(node.title);
-		var $td = $("<td>");
-		$td.append($listDiv);
-
-	}
-	//var li = $(node.title ? "<li>" : "<div>").append(span);
+function getDateEnd(date){
+	var str = date.toString();
+	var lastDigit = str.charAt(str.length-1)
 	
-	//For folders, recurse into parseNodes to read the childrenNodeTree
-	if (node.children && node.children.length > 0){
-		li.append(parseNodes(node.children));
+	if (lastDigit == 1) {
+		return (date + "st");
+	
+	}else if (lastDigit == 2) {
+		return (date + "nd");
+	
+	}else if (lastDigit == 3) {
+		return (date + "rd");
+	
+	}else{
+		return (date + "th");
 	}
-	return li;
 }
+
+
 
 
 function addEvents(){
@@ -117,6 +88,23 @@ function addEvents(){
 	$(".mainListItem").hover(
 		function() {
 			$(this).animate({"backgroundColor":"#252525"}, 100);
+			var node = chrome.bookmarks.getSubTree(this.id,
+				function(node){
+					node = node[0];
+					$("#infoPanTitle").html(node.title ? node.title : "NO TITLE");
+					$("#infoPanURL").html(node.url ? node.url : node.children.length + " children");
+					
+					if (node.dateAdded){
+						var date = new Date(node.dateAdded);
+						date = (getMonthString(date.getMonth()) + ' ' + getDateEnd(date.getDate()) +' '+  date.getFullYear());
+						$("#infoPanAddDate").html(node.url ? "Added on: " + date : "Created on: "+ date);
+					
+					}else{
+						$("#infoPanAddDate").html(node.url ? "Added on: NO DATE" : "Created on: NO DATE");
+					}
+					
+				}
+			);
 		},
 		function() {
 			$(this).animate({"backgroundColor":"#494949"}, 100);
@@ -175,3 +163,80 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+//UNUSED
+
+//Goes through the list returned by chrome.bookmarks.getTree()
+function parseNodes(nodeList){
+	var $table = $("#bmTable");
+
+	for(var i = 0;i < Math.ceil(nodeList.length/4);i++){
+
+		var $row = $("<tr>");
+		for(var j = 0; j < 4;j++){
+			$row.append(showNode(nodeList[i]));
+		}
+	}
+	return list;
+}
+
+//Extracts the data from each individual bookmarkNode
+function showNode(node){
+	if(node.title){
+		/*var anc = $("<a>");
+		anc.attr("href", node.url
+		anc.text(node.title);
+		var span = $("<span>");
+		span.append(anc).append(" - " +new Date(node.dateAdded));/////*
+
+		var $listDiv = $("<div>", {"class":"mainListItem"});
+		$listDiv.append(node.title);
+		var $td = $("<td>");
+		$td.append($listDiv);
+
+	}
+	//var li = $(node.title ? "<li>" : "<div>").append(span);
+	
+	//For folders, recurse into parseNodes to read the childrenNodeTree
+	if (node.children && node.children.length > 0){
+		li.append(parseNodes(node.children));
+	}
+	return li;
+}
+
+
+
+
+
+
+
+
+
+/*function getMainSubTree() {
+	var tree = chrome.bookmarks.getTree(
+		function(tree){
+			tree = tree.getChildren();
+		});
+
+	return tree;
+}*/
+
+//Shows all bookmarks as a list of links
+/*function showAll(){
+	var allNodes = chrome.bookmarks.getTree(function(allNodes){
+		$("#bm-list").append(parseNodes(allNodes));
+	});
+}*/
