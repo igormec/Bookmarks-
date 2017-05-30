@@ -81,9 +81,32 @@ function getDateEnd(date){
 }
 
 
+function makeInforBar(node){
+	$("#infoPanTitle").html(node.title ? node.title : "NO TITLE");
+	$("#infoPanURL").html(node.url ? node.url : node.children.length + " children");
 
+	if(node.url){
+		$("#infoPanIcon").css("backgroundColor","#FFFFFF");	
+	
+	}else{
+		$("#infoPanIcon").css("backgroundColor","#3585D9");
+	}
+	
+	
+	if (node.dateAdded){
+		var date = new Date(node.dateAdded);
+		date = (getMonthString(date.getMonth()) + ' ' + getDateEnd(date.getDate()) +' '+  date.getFullYear());
+		$("#infoPanAddDate").html(node.url ? "Added on: " + date : "Created on: "+ date);
+	
+	}else{
+		$("#infoPanAddDate").html(node.url ? "Added on: NO DATE" : "Created on: NO DATE");
+	}
+
+}
 
 function addEvents(){
+
+
 
 	$(".mainListItem").hover(
 		function() {
@@ -91,23 +114,18 @@ function addEvents(){
 			var node = chrome.bookmarks.getSubTree(this.id,
 				function(node){
 					node = node[0];
-					$("#infoPanTitle").html(node.title ? node.title : "NO TITLE");
-					$("#infoPanURL").html(node.url ? node.url : node.children.length + " children");
-					
-					if (node.dateAdded){
-						var date = new Date(node.dateAdded);
-						date = (getMonthString(date.getMonth()) + ' ' + getDateEnd(date.getDate()) +' '+  date.getFullYear());
-						$("#infoPanAddDate").html(node.url ? "Added on: " + date : "Created on: "+ date);
-					
-					}else{
-						$("#infoPanAddDate").html(node.url ? "Added on: NO DATE" : "Created on: NO DATE");
-					}
-					
+					makeInforBar(node);
 				}
 			);
 		},
 		function() {
 			$(this).animate({"backgroundColor":"#494949"}, 100);
+			var node = chrome.bookmarks.getSubTree(currentNode.id,
+				function(node){
+					node = node[0];
+					makeInforBar(node);
+				}
+			);		
 		}
 	);
 
@@ -162,6 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			//alert("OUT");
 		}
 	);
+
+	
 });
 
 
