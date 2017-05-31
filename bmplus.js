@@ -1,6 +1,9 @@
 var currentNode = null;
+var columns = 0;
+var tableHeight = 0;
 
 function makeTable(nodeList) {
+
 	var $table = $("#bmTable");
 	$table.remove();
 	$("#bm-list").append($("<table>", {"id":"bmTable"}))
@@ -79,6 +82,29 @@ function getDateEnd(date){
 		return (date + "th");
 	}
 }
+
+function setSizes(){
+	console.log("Changing size");
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+	oldCols = columns;
+	oldTblHeight = tableHeight;
+	columns = Math.ceil(width*0.7)/240;
+	tableHeight = Math.ceil(height*0.7);
+
+	//Change the table and row values and reload doc
+	//only if at least one of them has changed
+	if(!(columns == oldCols && tableHeight == oldTblHeight)){
+		console.log("Changing size for real");
+		var node = chrome.bookmarks.getSubTree(currentNode.id,
+			function(node){
+				node = node[0];
+				makeTable(node.children);
+			}
+		);
+	}	
+}
+
 
 
 function makeInforBar(node){
@@ -160,11 +186,15 @@ function addEvents(){
 	);
 }
 
+
 document.addEventListener('DOMContentLoaded', function () {
+  	
+
   	var tree = chrome.bookmarks.getTree(
   		//on load, tree is 0th/top node given in an array of length 1
   		//take children of tree[0] to get Bookmarks Bar and Other bookmarks
   		function(tree){
+  			currentNode = tree[0];
   			var mainBookmarksArray = tree[0].children;
   			makeTable(mainBookmarksArray);  				
   		}
@@ -180,9 +210,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			//alert("OUT");
 		}
 	);
-
-	
 });
+
+window.addEventListener("resize", setSizes);
 
 
 
